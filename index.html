@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drew's Task Timer</title>
+
+<!-- PWA Meta Tags -->
+<meta name="application-name" content="Task Timer">
+<meta name="description" content="Drew's Notion Task Timer">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Task Timer">
+
+<!-- Inline manifest as data URI so it works from a single file -->
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Drew%27s+Task+Timer%22%2C%22short_name%22%3A%22Timer%22%2C%22description%22%3A%22Notion-connected+task+timer%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230a0a0a%22%2C%22theme_color%22%3A%22%230a0a0a%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg+xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27+viewBox%3D%270+0+512+512%27%253E%253Crect+width%3D%27512%27+height%3D%27512%27+rx%3D%27100%27+fill%3D%27%230a0a0a%27%2F%253E%253Ctext+x%3D%27256%27+y%3D%27340%27+font-size%3D%27280%27+text-anchor%3D%27middle%27+fill%3D%27%23e8ff47%27%253E%25E2%258F%25B1%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any+maskable%22%7D%5D%7D">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #0a0a0a; --surface: #111; --surface2: #161616;
+    --border: #1e1e1e; --border2: #2a2a2a;
+    --accent: #e8ff47; --accent2: #47c8ff;
+    --text: #f0f0f0; --muted: #4a4a4a; --muted2: #666;
+    --danger: #ff4747; --green: #47ffb0; --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; top: -300px; left: 50%; transform: translateX(-50%);
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(232,255,71,0.05) 0%, transparent 65%);
+    pointer-events: none; z-index: 0; transition: background 1s ease;
+  }
+  body.running::before { background: radial-gradient(circle, rgba(71,200,255,0.07) 0%, transparent 65%); }
+
+  .app { display: flex; min-height: 100vh; position: relative; z-index: 1; }
+
+  .left {
+    flex: 0 0 320px; padding: 28px 22px;
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 14px;
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  }
+  .right { flex: 1; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; color: var(--accent); line-height: 1; }
+  .logo span { display: block; color: var(--muted2); font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; margin-top: 3px; }
+
+  /* Install Banner */
+  .install-banner {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px 16px;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .install-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .install-title { font-size: 10px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 6px; }
+  .install-steps { font-size: 10px; color: var(--muted2); line-height: 1.9; }
+  .install-steps b { color: var(--text); font-weight: 500; }
+
+  /* Big install button — shown when browser fires beforeinstallprompt */
+  .install-btn-wrap { display: none; }
+  .install-btn-wrap.visible { display: block; }
+  .btn-install {
+    width: 100%; padding: 13px; border-radius: 8px;
+    background: var(--accent); color: #0a0a0a;
+    border: none; font-family: 'DM Mono', monospace;
+    font-size: 12px; font-weight: 500; letter-spacing: 2px;
+    text-transform: uppercase; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: background 0.2s, transform 0.15s;
+    animation: installPulse 2.5s ease-in-out infinite;
+  }
+  .btn-install:hover { background: #f0ff60; transform: translateY(-1px); }
+  @keyframes installPulse { 0%,100%{ box-shadow: 0 0 0 0 rgba(232,255,71,0); } 50%{ box-shadow: 0 0 0 6px rgba(232,255,71,0.15); } }
+
+  /* Timer */
+  .timer-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px 18px;
+    position: relative; overflow: hidden; transition: border-color 0.4s;
+  }
+  .timer-card.active { border-color: rgba(71,200,255,0.4); }
+  .timer-glow {
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent2), transparent);
+    opacity: 0; transition: opacity 0.5s;
+  }
+  .timer-card.active .timer-glow { opacity: 1; }
+  .task-label { font-size: 10px; letter-spacing: 2px; color: var(--muted2); text-transform: uppercase; margin-bottom: 5px; }
+  .task-name {
+    font-family: 'Bebas Neue', sans-serif; font-size: 19px; letter-spacing: 1px;
+    color: var(--text); min-height: 23px; line-height: 1.1; margin-bottom: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .task-client { font-size: 11px; color: var(--muted2); margin-bottom: 18px; min-height: 14px; }
+  .time-display {
+    font-family: 'Bebas Neue', sans-serif; font-size: 66px; letter-spacing: 3px;
+    line-height: 1; color: var(--accent); margin-bottom: 6px;
+    transition: color 0.4s, text-shadow 0.4s;
+    text-shadow: 0 0 30px rgba(232,255,71,0.15);
+  }
+  .timer-card.active .time-display { color: var(--accent2); text-shadow: 0 0 30px rgba(71,200,255,0.2); }
+  .status-row { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); transition: background 0.3s, box-shadow 0.3s; }
+  .status-dot.running { background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 1.5s infinite; }
+  .status-dot.paused { background: var(--accent); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+  .status-text { font-size: 11px; color: var(--muted2); letter-spacing: 1.5px; }
+  .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+  .btn {
+    padding: 10px 12px; border-radius: 7px; border: 1px solid var(--border2);
+    font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+    letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
+    transition: all 0.18s; display: flex; align-items: center; justify-content: center; gap: 5px;
+  }
+  .btn:disabled { opacity: 0.28; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+  .btn-primary { background: var(--accent); color: #0a0a0a; border-color: var(--accent); }
+  .btn-primary:hover:not(:disabled) { background: #f0ff60; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(232,255,71,0.22); }
+  .btn-secondary { background: transparent; color: var(--text); }
+  .btn-secondary:hover:not(:disabled) { background: rgba(255,255,255,0.04); }
+  .btn-danger { background: transparent; color: var(--danger); border-color: rgba(255,71,71,0.25); grid-column: span 2; }
+  .btn-danger:hover:not(:disabled) { background: rgba(255,71,71,0.08); border-color: var(--danger); }
+
+  /* Section */
+  .section-header { display: flex; align-items: center; justify-content: space-between; }
+  .section-label { font-size: 10px; letter-spacing: 2px; color: var(--muted2); text-transform: uppercase; }
+
+  /* Add Task */
+  .add-task-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .add-task-toggle {
+    width: 100%; padding: 13px 16px; background: none; border: none;
+    color: var(--accent); font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s;
+  }
+  .add-task-toggle:hover { background: rgba(232,255,71,0.04); }
+  .plus-icon { font-size: 16px; font-weight: 300; }
+  .add-task-form { padding: 0 16px 16px; display: none; flex-direction: column; gap: 10px; border-top: 1px solid var(--border); }
+  .add-task-form.open { display: flex; }
+  .form-row { display: flex; flex-direction: column; gap: 4px; }
+  .form-label { font-size: 10px; letter-spacing: 1.5px; color: var(--muted2); text-transform: uppercase; padding-top: 6px; }
+  .form-input, .form-select {
+    background: var(--bg); border: 1px solid var(--border2); border-radius: 6px;
+    color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px;
+    padding: 10px 12px; outline: none; width: 100%; transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-select:focus { border-color: var(--accent); }
+  .form-select option { background: #1a1a1a; }
+  .form-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+  .btn-add { background: var(--accent); color: #0a0a0a; border-color: var(--accent); }
+  .btn-add:hover:not(:disabled) { background: #f0ff60; }
+  .btn-cancel-add { background: transparent; color: var(--muted2); border-color: var(--border2); }
+  .btn-cancel-add:hover { color: var(--text); }
+
+  /* Alert */
+  .alert { border-radius: 7px; padding: 10px 14px; font-size: 11px; letter-spacing: 0.5px; display: none; }
+
+  /* Task List */
+  .task-list { display: flex; flex-direction: column; gap: 6px; }
+  .task-item {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px 14px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.18s;
+  }
+  .task-item:hover { border-color: var(--border2); background: var(--surface2); }
+  .task-item.selected { border-color: rgba(71,200,255,0.45); background: rgba(71,200,255,0.04); }
+  .task-item-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); flex-shrink: 0; transition: background 0.2s; }
+  .task-item:hover .task-item-dot { background: var(--muted2); }
+  .task-item.selected .task-item-dot { background: var(--accent2); }
+  .task-item-content { flex: 1; min-width: 0; }
+  .task-item-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+  .task-item-meta { font-size: 10px; color: var(--muted2); }
+  .task-time-badge { font-size: 11px; color: var(--muted2); flex-shrink: 0; }
+
+  .loading-row { display: flex; align-items: center; gap: 10px; color: var(--muted2); font-size: 12px; padding: 16px 0; }
+  .spinner { width: 14px; height: 14px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .empty-msg { color: var(--muted2); font-size: 12px; padding: 16px 0; }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  @media (max-width: 640px) {
+    .app { flex-direction: column; }
+    .left { position: static; height: auto; flex: none; border-right: none; border-bottom: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- LEFT -->
+  <div class="left">
+    <div class="logo">TIMER <span>DREW'S TASK TRACKER</span></div>
+
+    <div id="alert" class="alert"></div>
+
+    <!-- Big Install Button (shown automatically by browser) -->
+    <div class="install-btn-wrap" id="installBtnWrap">
+      <button class="btn-install" id="installBtn">
+        🖥️ INSTALL AS DESKTOP APP
+      </button>
+    </div>
+
+    <div class="timer-card" id="timerCard">
+      <div class="timer-glow"></div>
+      <div class="task-label">ACTIVE TASK</div>
+      <div class="task-name" id="activeTaskName">— NO TASK SELECTED —</div>
+      <div class="task-client" id="activeTaskClient"></div>
+      <div class="time-display" id="timeDisplay">00:00:00</div>
+      <div class="status-row">
+        <div class="status-dot" id="statusDot"></div>
+        <div class="status-text" id="statusText">IDLE</div>
+      </div>
+      <div class="controls">
+        <button class="btn btn-primary" id="startBtn" onclick="startTimer()" disabled>▶ START</button>
+        <button class="btn btn-secondary" id="pauseBtn" onclick="pauseTimer()" disabled>⏸ PAUSE</button>
+        <button class="btn btn-danger" id="stopBtn" onclick="stopTimer()" disabled>■ COMPLETE</button>
+      </div>
+    </div>
+
+    <!-- Fallback instructions (hidden if install button is shown) -->
+    <div class="install-banner" id="installFallback">
+      <div class="install-icon">🖥️</div>
+      <div>
+        <div class="install-title">USE AS DESKTOP APP</div>
+        <div class="install-steps">
+          Host this file on <b>GitHub Pages</b> (free), then open it in Chrome/Edge — an <b>Install</b> button will appear automatically above.<br><br>
+          Or in <b>Chrome</b>: open the file, click ⋮ → <i>Cast, save and share</i> → <i>Install page as app</i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <div class="section-header">
+      <div class="section-label">YOUR TASKS</div>
+      <button class="btn btn-secondary" style="padding:6px 12px;font-size:10px;letter-spacing:1px;" onclick="loadTasks()">⟳ REFRESH</button>
+    </div>
+
+    <div class="add-task-panel">
+      <button class="add-task-toggle" onclick="toggleAddForm()">
+        <span class="plus-icon" id="addToggleIcon">+</span>
+        <span id="addToggleLabel">ADD NEW TASK TO NOTION</span>
+      </button>
+      <div class="add-task-form" id="addTaskForm">
+        <div class="form-row">
+          <div class="form-label">Task Name *</div>
+          <input class="form-input" id="newTaskName" type="text" placeholder="e.g. Edit Masters GFX reel" />
+        </div>
+        <div class="form-row">
+          <div class="form-label">Client</div>
+          <select class="form-select" id="newTaskClient">
+            <option value="">— No client —</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-label">Month</div>
+          <select class="form-select" id="newTaskMonth">
+            <option value="">— Select month —</option>
+            <option>January</option><option>February</option><option>March</option>
+            <option>April</option><option>May</option><option>June</option>
+            <option>July</option><option>August</option><option>September</option>
+            <option>October</option><option>November</option><option>December</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-add" onclick="addTask()" id="addTaskBtn">+ ADD TO NOTION</button>
+          <button class="btn btn-cancel-add" onclick="toggleAddForm()">CANCEL</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="taskList">
+      <div class="loading-row"><div class="spinner"></div>Loading tasks from Notion…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── PWA Install Prompt ───
+let deferredInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  document.getElementById('installBtnWrap').classList.add('visible');
+  document.getElementById('installFallback').style.display = 'none';
+});
+
+document.getElementById('installBtn').addEventListener('click', async () => {
+  if (!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  const { outcome } = await deferredInstallPrompt.userChoice;
+  if (outcome === 'accepted') {
+    document.getElementById('installBtnWrap').classList.remove('visible');
+    showAlert('✓ App installed! Find it in your Start Menu or Dock.', 'success');
+  }
+  deferredInstallPrompt = null;
+});
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('installBtnWrap').classList.remove('visible');
+});
+
+// ─── Register Service Worker (inline, for PWA installability) ───
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'task-timer-v1';
+    self.addEventListener('install', e => {
+      e.waitUntil(caches.open(CACHE).then(c => c.addAll(['./', './index.html'])).catch(() => {}));
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+    });
+  `;
+  const swBlob = new Blob([swCode], { type: 'application/javascript' });
+  const swUrl = URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swUrl, { scope: './' }).catch(() => {});
+}
+
+// ─── State ───
+let tasks = [], clients = [], selectedTask = null;
+let timerState = 'idle', elapsed = 0, timerInterval = null, startedAt = null;
+
+// Auto-set current month
+(function() {
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const cur = months[new Date().getMonth()];
+  for (let o of document.getElementById('newTaskMonth').options) { if (o.value === cur) { o.selected = true; break; } }
+})();
+
+// ─── Load Tasks ───
+async function loadTasks() {
+  document.getElementById('taskList').innerHTML = '<div class="loading-row"><div class="spinner"></div>Loading tasks from Notion…</div>';
+  try {
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 2000,
+        system: `Access Drew's Notion workspace. Return ONLY a JSON object (no markdown, no explanation) with:
+"tasks": active (non-completed) tasks from collection://dee9aa65-c76b-825a-8755-0785a85d9bef. Each: { "id": "<page url>", "name": "<Task title>", "month": "<Month or empty>", "timeSpent": "<Time Spent or empty>" }. Max 30, newest first.
+"clients": all clients from collection://7959aa65-c76b-820c-9c71-07e4e5e57ea4. Each: { "id": "<page url>", "name": "<name>" }.`,
+        messages: [{ role: "user", content: "Fetch active tasks and clients." }],
+        mcp_servers: [{ type: "url", url: "https://mcp.notion.com/mcp", name: "notion-mcp" }]
+      })
+    });
+    const data = await resp.json();
+    const txt = (data.content?.find(b => b.type === "text")?.text || "{}").replace(/```json|```/g, "").trim();
+    const parsed = JSON.parse(txt);
+    tasks = parsed.tasks || [];
+    clients = parsed.clients || [];
+    renderTaskList();
+    populateClients();
+  } catch(e) {
+    document.getElementById('taskList').innerHTML = '<div class="empty-msg">⚠ Could not load. Try refreshing.</div>';
+  }
+}
+
+function renderTaskList() {
+  const el = document.getElementById('taskList');
+  if (!tasks.length) { el.innerHTML = '<div class="empty-msg">No active tasks found.</div>'; return; }
+  el.innerHTML = '<div class="task-list">' + tasks.map((t,i) => `
+    <div class="task-item ${selectedTask?.id===t.id?'selected':''}" onclick="selectTask(${i})">
+      <div class="task-item-dot"></div>
+      <div class="task-item-content">
+        <div class="task-item-name">${esc(t.name)}</div>
+        <div class="task-item-meta">${esc(t.month||'—')}</div>
+      </div>
+      <div class="task-time-badge">${esc(t.timeSpent||'')}</div>
+    </div>`).join('') + '</div>';
+}
+
+function populateClients() {
+  const sel = document.getElementById('newTaskClient');
+  sel.innerHTML = '<option value="">— No client —</option>';
+  clients.forEach(c => { const o = document.createElement('option'); o.value = c.id; o.textContent = c.name; sel.appendChild(o); });
+}
+
+// ─── Add Task ───
+function toggleAddForm() {
+  const form = document.getElementById('addTaskForm');
+  const open = form.classList.toggle('open');
+  document.getElementById('addToggleIcon').textContent = open ? '×' : '+';
+  document.getElementById('addToggleLabel').textContent = open ? 'CLOSE FORM' : 'ADD NEW TASK TO NOTION';
+  if (open) document.getElementById('newTaskName').focus();
+}
+
+async function addTask() {
+  const name = document.getElementById('newTaskName').value.trim();
+  if (!name) { showAlert('Please enter a task name.', 'warn'); return; }
+  const month = document.getElementById('newTaskMonth').value;
+  const clientSel = document.getElementById('newTaskClient');
+  const clientId = clientSel.value;
+  const clientName = clientId ? clientSel.selectedOptions[0]?.text : '';
+  const btn = document.getElementById('addTaskBtn');
+  btn.textContent = '…ADDING'; btn.disabled = true;
+  try {
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 500,
+        system: `Create a new page in Drew's Tasks Notion database. Database URL: https://www.notion.so/cb69aa65c76b83478e5b81ccd3754ef5 (data source: collection://dee9aa65-c76b-825a-8755-0785a85d9bef). Set the Task title, Month select field, and Client relation if provided. Reply ONLY with JSON: {"success":true} or {"success":false,"error":"..."}`,
+        messages: [{ role: "user", content: JSON.stringify({ task: name, month: month||null, clientId: clientId||null, clientName: clientName||null }) }],
+        mcp_servers: [{ type: "url", url: "https://mcp.notion.com/mcp", name: "notion-mcp" }]
+      })
+    });
+    const data = await resp.json();
+    const txt = (data.content?.find(b => b.type==="text")?.text||"{}").replace(/```json|```/g,"").trim();
+    const result = JSON.parse(txt);
+    if (result.success) {
+      showAlert(`✓ "${name}" added to Notion!`, 'success');
+      document.getElementById('newTaskName').value = '';
+      toggleAddForm();
+      setTimeout(loadTasks, 900);
+    } else {
+      showAlert('⚠ ' + (result.error || 'Could not add task.'), 'warn');
+    }
+  } catch(e) { showAlert('⚠ Error adding task. Try again.', 'warn'); }
+  btn.textContent = '+ ADD TO NOTION'; btn.disabled = false;
+}
+
+document.getElementById('newTaskName').addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
+
+// ─── Timer ───
+function selectTask(i) {
+  if (timerState === 'running') return;
+  selectedTask = tasks[i];
+  document.getElementById('activeTaskName').textContent = selectedTask.name;
+  document.getElementById('activeTaskClient').textContent = selectedTask.month || '';
+  document.getElementById('startBtn').disabled = false;
+  document.getElementById('stopBtn').disabled = false;
+  if (timerState === 'idle') { elapsed = 0; updateDisplay(); }
+  renderTaskList();
+  showAlert('Selected: ' + selectedTask.name, 'info');
+}
+
+function startTimer() {
+  if (!selectedTask || timerState === 'running') return;
+  timerState = 'running';
+  startedAt = Date.now() - (elapsed * 1000);
+  timerInterval = setInterval(() => { elapsed = Math.floor((Date.now()-startedAt)/1000); updateDisplay(); }, 500);
+  setStatus('running');
+  document.getElementById('startBtn').textContent = '▶ RUNNING';
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('pauseBtn').disabled = false;
+  document.getElementById('timerCard').classList.add('active');
+  document.body.classList.add('running');
+}
+
+function pauseTimer() {
+  if (timerState !== 'running') return;
+  clearInterval(timerInterval); timerInterval = null; timerState = 'paused';
+  setStatus('paused');
+  document.getElementById('startBtn').textContent = '▶ RESUME';
+  document.getElementById('startBtn').disabled = false;
+  document.getElementById('pauseBtn').disabled = true;
+  document.getElementById('timerCard').classList.remove('active');
+  document.body.classList.remove('running');
+}
+
+function stopTimer() {
+  if (!selectedTask) return;
+  clearInterval(timerInterval); timerInterval = null;
+  const ft = formatTime(elapsed);
+  if (!confirm(`Complete "${selectedTask.name}"?\nTime: ${ft}`)) { if (timerState==='running') startTimer(); return; }
+  timerState = 'idle'; elapsed = 0; updateDisplay(); setStatus('idle');
+  document.getElementById('activeTaskName').textContent = '— TASK COMPLETED —';
+  document.getElementById('activeTaskClient').textContent = '';
+  document.getElementById('startBtn').textContent = '▶ START';
+  ['startBtn','pauseBtn','stopBtn'].forEach(id => document.getElementById(id).disabled = true);
+  document.getElementById('timerCard').classList.remove('active');
+  document.body.classList.remove('running');
+  selectedTask = null; renderTaskList();
+  showAlert(`✓ Completed! ${ft} logged.`, 'success');
+  setTimeout(loadTasks, 1200);
+}
+
+function updateDisplay() { document.getElementById('timeDisplay').textContent = formatTime(elapsed); }
+function formatTime(s) { return `${pad(Math.floor(s/3600))}:${pad(Math.floor((s%3600)/60))}:${pad(s%60)}`; }
+function pad(n) { return String(n).padStart(2,'0'); }
+function setStatus(st) {
+  document.getElementById('statusDot').className = 'status-dot ' + st;
+  document.getElementById('statusText').textContent = {idle:'IDLE',running:'RUNNING',paused:'PAUSED'}[st];
+}
+
+let _at;
+function showAlert(msg, type) {
+  const el = document.getElementById('alert');
+  el.style.display = 'block'; el.textContent = msg;
+  const s = {
+    success: { bg:'rgba(71,255,176,0.07)', b:'rgba(71,255,176,0.25)', c:'#47ffb0' },
+    info:    { bg:'rgba(71,200,255,0.06)', b:'rgba(71,200,255,0.2)',  c:'#47c8ff' },
+    warn:    { bg:'rgba(255,71,71,0.07)',  b:'rgba(255,71,71,0.25)',  c:'#ff6b6b' }
+  }[type] || {};
+  Object.assign(el.style, { background: s.bg, border: `1px solid ${s.b}`, color: s.c });
+  clearTimeout(_at); _at = setTimeout(() => { el.style.display = 'none'; }, 3500);
+}
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+loadTasks();
+</script>
+</body>
+</html>
