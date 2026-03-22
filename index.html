@@ -29,7 +29,6 @@ body.running::before{background:radial-gradient(circle,rgba(71,200,255,.06) 0%,t
 .logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--accent);line-height:1}
 .logo span{display:block;color:var(--muted2);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;margin-top:2px}
 
-/* Timer */
 .timer-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 16px;position:relative;overflow:hidden;transition:border-color .4s}
 .timer-card.active{border-color:rgba(71,200,255,.4)}
 .timer-glow{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent2),transparent);opacity:0;transition:opacity .5s}
@@ -49,7 +48,6 @@ body.running::before{background:radial-gradient(circle,rgba(71,200,255,.06) 0%,t
 .status-text{font-size:10px;color:var(--muted2);letter-spacing:1.5px}
 .controls{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 
-/* Buttons */
 .btn{padding:9px 10px;border-radius:7px;border:1px solid var(--border2);font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}
 .btn:disabled{opacity:.25;cursor:not-allowed;transform:none!important;box-shadow:none!important}
 .btn-primary{background:var(--accent);color:#0a0a0a;border-color:var(--accent)}
@@ -62,12 +60,10 @@ body.running::before{background:radial-gradient(circle,rgba(71,200,255,.06) 0%,t
 .btn-submit:hover:not(:disabled){background:rgba(71,255,176,.08);border-color:var(--green)}
 .btn-submit:disabled{opacity:.25;cursor:not-allowed}
 
-/* Install */
 .btn-install{width:100%;padding:10px;border-radius:8px;background:var(--accent);color:#0a0a0a;border:none;font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .2s;animation:installPulse 2.5s ease-in-out infinite;display:none;align-items:center;justify-content:center;gap:6px}
 .btn-install.show{display:flex}
 @keyframes installPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,255,71,0)}50%{box-shadow:0 0 0 5px rgba(232,255,71,.12)}}
 
-/* Stats */
 .day-summary{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
 .day-summary-title{font-size:9px;letter-spacing:2px;color:var(--muted2);text-transform:uppercase;margin-bottom:10px}
 .day-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
@@ -75,12 +71,10 @@ body.running::before{background:radial-gradient(circle,rgba(71,200,255,.06) 0%,t
 .day-stat-val{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--accent);line-height:1;margin-bottom:2px}
 .day-stat-label{font-size:9px;color:var(--muted2);letter-spacing:1px;text-transform:uppercase}
 
-/* Submit */
 .submit-section{background:var(--surface);border:1px solid rgba(71,255,176,.15);border-radius:var(--r);padding:14px 16px}
 .submit-title{font-size:9px;letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:5px}
 .submit-desc{font-size:10px;color:var(--muted2);line-height:1.7;margin-bottom:10px}
 
-/* Tabs */
 .tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:16px;flex-shrink:0}
 .tab{padding:10px 14px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap}
 .tab:hover{color:var(--text)}
@@ -89,7 +83,6 @@ body.running::before{background:radial-gradient(circle,rgba(71,200,255,.06) 0%,t
 .panel{display:none;flex-direction:column;gap:10px}
 .panel.active{display:flex}
 
-/* Add Task */
 .add-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;flex-shrink:0}
 .add-toggle{width:100%;padding:11px 14px;background:none;border:none;color:var(--accent);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:7px;transition:background .2s}
 .add-toggle:hover{background:rgba(232,255,71,.04)}
@@ -104,7 +97,6 @@ body.running::before{background:radial-gradient(circle,rgba(71,200,255,.06) 0%,t
 .btn-add:hover:not(:disabled){background:#f0ff60}
 .btn-cancel-form{background:transparent;color:var(--muted2);border-color:var(--border2)}
 
-/* Task items */
 .titem{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:9px;transition:all .18s;position:relative}
 .titem.clickable{cursor:pointer}
 .titem.clickable:hover{border-color:var(--border2);background:var(--surface2)}
@@ -123,7 +115,6 @@ body.running::before{background:radial-gradient(circle,rgba(71,200,255,.06) 0%,t
 .taction:hover{border-color:var(--border3);color:var(--text);background:var(--surface3)}
 .taction.del:hover{border-color:rgba(255,71,71,.4);color:var(--danger);background:rgba(255,71,71,.07)}
 
-/* Modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 .modal-overlay.open{display:flex}
 .modal{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:24px;width:300px}
@@ -138,7 +129,6 @@ body.running::before{background:radial-gradient(circle,rgba(71,200,255,.06) 0%,t
 .btn-save:hover{background:#f0ff60}
 .btn-modal-cancel{background:transparent;color:var(--muted2);border-color:var(--border2)}
 
-/* Alert */
 .alert{border-radius:7px;padding:8px 12px;font-size:10px;display:none;line-height:1.5}
 .sdivider{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;padding:4px 0;border-bottom:1px solid var(--border);margin-bottom:6px}
 .empty{color:var(--muted2);font-size:11px;padding:16px 0;text-align:center}
@@ -229,11 +219,11 @@ body.running::before{background:radial-gradient(circle,rgba(71,200,255,.06) 0%,t
           <div><div class="flabel">Client</div>
             <select class="fselect" id="newClient">
               <option value="">— No client —</option>
-              <option value="https://www.notion.so/5169aa65c76b8254bf0d8124f28063b8">Bryson DeChambeau</option>
-              <option value="https://www.notion.so/2179aa65c76b8268af928189afd55a80">Crushers GC</option>
-              <option value="https://www.notion.so/4279aa65c76b828a87a90127dc93cb96">Reebok Golf</option>
-              <option value="https://www.notion.so/e839aa65c76b8390b690015be3776304">LIV Golf</option>
-              <option value="https://www.notion.so/bf39aa65c76b8320a63c011ddf200aae">ICON GLOBAL MEDIA</option>
+              <option value="Bryson DeChambeau">Bryson DeChambeau</option>
+              <option value="Crushers GC">Crushers GC</option>
+              <option value="Reebok Golf">Reebok Golf</option>
+              <option value="LIV Golf">LIV Golf</option>
+              <option value="ICON GLOBAL MEDIA">ICON GLOBAL MEDIA</option>
             </select>
           </div>
           <div><div class="flabel">Month</div>
@@ -259,8 +249,8 @@ body.running::before{background:radial-gradient(circle,rgba(71,200,255,.06) 0%,t
 
     <!-- NOTION TASKS -->
     <div class="panel" id="panel-notion">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-        <div style="font-size:10px;color:var(--muted2);line-height:1.7">Your active Notion tasks. Click any to add to today's queue.</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="font-size:10px;color:var(--muted2);line-height:1.7;flex:1">Your active Notion tasks. Click any to add to today's queue.</div>
         <button class="btn btn-secondary" style="padding:5px 10px;font-size:9px;letter-spacing:1px;flex-shrink:0;margin-left:10px" onclick="loadNotionTasks()">⟳ REFRESH</button>
       </div>
       <div id="notionList"><div class="loading-row"><div class="spinner"></div>Loading from Notion…</div></div>
@@ -268,7 +258,7 @@ body.running::before{background:radial-gradient(circle,rgba(71,200,255,.06) 0%,t
 
     <!-- RECENT -->
     <div class="panel" id="panel-recent">
-      <div style="font-size:10px;color:var(--muted2);padding:2px 0 8px;line-height:1.7">Tasks you've worked on recently. Click to resume without creating a duplicate in Notion.</div>
+      <div style="font-size:10px;color:var(--muted2);padding:2px 0 8px;line-height:1.7">Tasks you've worked on recently. Click to resume without creating a duplicate.</div>
       <div id="recentList"></div>
     </div>
   </div>
@@ -284,27 +274,27 @@ if('serviceWorker'in navigator){const sw=`self.addEventListener('fetch',e=>e.res
 // ── Storage ──
 function load(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}}
 function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
-
-let queue=load('queue_v4',[]);
-let recent=load('recent_v4',[]);
+let queue=load('queue_v5',[]);
+let recent=load('recent_v5',[]);
 let notionTasksCache=[];
 
-// ── Claude API (routes all Notion calls through Claude's auth) ──
-async function callClaude(systemPrompt, userMessage) {
-  const resp = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
+// ── Notion config ──
+// These are the exact IDs verified to work — do not change
+const TASKS_DS_ID = "dee9aa65-c76b-825a-8755-0785a85d9bef"; // data_source_id for create
+const MCP_SERVER = {type:"url", url:"https://mcp.notion.com/mcp", name:"notion-mcp"};
+
+// ── Claude API helper ──
+async function callClaude(system, user) {
+  const r = await fetch("https://api.anthropic.com/v1/messages", {
+    method:"POST", headers:{"Content-Type":"application/json"},
     body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1000,
-      system: systemPrompt,
-      messages: [{role:"user", content: userMessage}],
-      mcp_servers: [{type:"url", url:"https://mcp.notion.com/mcp", name:"notion-mcp"}]
+      model:"claude-sonnet-4-20250514", max_tokens:1000,
+      system, messages:[{role:"user",content:user}],
+      mcp_servers:[MCP_SERVER]
     })
   });
-  const data = await resp.json();
-  const text = data.content?.find(b=>b.type==="text")?.text || "";
-  return text.replace(/```json|```/g,"").trim();
+  const d = await r.json();
+  return (d.content?.find(b=>b.type==="text")?.text||"").replace(/```json|```/g,"").trim();
 }
 
 // ── Load Notion Tasks ──
@@ -312,14 +302,14 @@ async function loadNotionTasks() {
   document.getElementById('notionList').innerHTML='<div class="loading-row"><div class="spinner"></div>Loading from Notion…</div>';
   try {
     const raw = await callClaude(
-      `Query the active tasks view from Drew's Tasks Notion database at: https://www.notion.so/cb69aa65c76b83478e5b81ccd3754ef5?v=c599aa65c76b82459cde88619695ab9a
-Return ONLY a JSON array, no markdown. Each item: {"id":"<page url>","name":"<Task title>","month":"<Month or empty>","client":"<client name or empty>"}. Exclude any task that has a Parent item. Max 40.`,
+      `Query Drew's active tasks view: https://www.notion.so/cb69aa65c76b83478e5b81ccd3754ef5?v=c599aa65c76b82459cde88619695ab9a
+Return ONLY a JSON array. Each item: {"id":"<page url>","name":"<Task title>","month":"<Month or empty>","client":"<client name or empty>"}. Exclude sub-tasks (those with a Parent item). Max 40.`,
       "List active tasks."
     );
     notionTasksCache = JSON.parse(raw);
     renderNotionList();
   } catch(e) {
-    document.getElementById('notionList').innerHTML='<div class="empty">⚠ Could not load. Make sure you\'re accessing this from claude.ai, then retry.</div>';
+    document.getElementById('notionList').innerHTML='<div class="empty">⚠ Could not load. Open this app from claude.ai and try again.</div>';
   }
 }
 
@@ -329,28 +319,17 @@ function renderNotionList() {
   const available=notionTasksCache.filter(t=>!inQueue.includes(t.id));
   if(!available.length){el.innerHTML='<div class="empty">All Notion tasks are in your queue, or none found.</div>';return;}
   el.innerHTML=available.map(t=>`
-    <div class="titem clickable" onclick="addNotionTaskToQueue(${JSON.stringify(JSON.stringify(t))})">
+    <div class="titem clickable" onclick='addNotionToQueue(${JSON.stringify(JSON.stringify(t))})'>
       <div class="tdot"></div>
       <div class="tcontent"><div class="tname">${esc(t.name)}</div><div class="tmeta">${esc(t.client||t.month||'—')}</div></div>
       <div class="tright"><div class="tactions" style="opacity:1"><button class="taction" style="color:var(--accent);border-color:rgba(232,255,71,.3)">+</button></div></div>
     </div>`).join('');
 }
 
-function addNotionTaskToQueue(tJson) {
+function addNotionToQueue(tJson){
   const t=JSON.parse(tJson);
-  addToQueueDirect(t.name,t.client,'',t.month,t.id);
+  addToQueueDirect(t.name,t.client||'','',t.month||'',t.id);
   switchTab('queue');
-}
-
-// ── Add Task to Notion via Claude ──
-async function createNotionTask(name, month, clientName) {
-  const raw = await callClaude(
-    `Create a new page in Drew's Tasks Notion database (https://www.notion.so/cb69aa65c76b83478e5b81ccd3754ef5).
-Set the Task title field. If month is provided, set the Month select field. If clientName is provided, find the matching client in Drew's Clients database and set the Clients relation.
-Reply ONLY with JSON: {"success":true,"id":"<new page url>"} or {"success":false,"error":"..."}`,
-    JSON.stringify({task:name, month:month||null, clientName:clientName||null})
-  );
-  return JSON.parse(raw);
 }
 
 // ── Queue ──
@@ -364,11 +343,9 @@ function toggleForm(){
 function addToQueue(){
   const name=document.getElementById('newName').value.trim();
   if(!name){showAlert('Enter a task name.','warn');return;}
-  const cSel=document.getElementById('newClient');
-  const clientId=cSel.value;
-  const clientName=clientId?cSel.selectedOptions[0]?.text:'';
+  const client=document.getElementById('newClient').value;
   const month=document.getElementById('newMonth').value;
-  addToQueueDirect(name,clientName,clientId,month,null);
+  addToQueueDirect(name,client,'',month,null);
   document.getElementById('newName').value='';
   toggleForm();
 }
@@ -376,8 +353,8 @@ document.getElementById('newName').addEventListener('keydown',e=>{if(e.key==='En
 
 function addToQueueDirect(name,client,clientId,month,notionId){
   if(queue.find(t=>!t.done&&t.name.toLowerCase()===name.toLowerCase())){showAlert(`"${name}" is already in your queue.`,'warn');return;}
-  const task={id:'q-'+Date.now(),name,client:client||'',clientId:clientId||'',month:month||'',elapsed:0,done:false,notionId:notionId||null};
-  queue.push(task);save('queue_v4',queue);
+  const task={id:'q-'+Date.now(),name,client,clientId,month,elapsed:0,done:false,notionId:notionId||null};
+  queue.push(task);save('queue_v5',queue);
   renderQueue();updateStats();
   showAlert(`✓ "${name}" added to queue.`,'success');
 }
@@ -434,14 +411,13 @@ function renderRecentList(){
 }
 
 function resumeFromRecent(id){
-  const t=recent.find(x=>x.id===id);
-  if(!t)return;
+  const t=recent.find(x=>x.id===id);if(!t)return;
   if(queue.find(q=>q.name.toLowerCase()===t.name.toLowerCase()&&!q.done)){showAlert(`"${t.name}" already in queue.`,'warn');switchTab('queue');return;}
   queue.push({...t,id:'q-'+Date.now(),done:false});
-  save('queue_v4',queue);renderQueue();updateStats();switchTab('queue');
+  save('queue_v5',queue);renderQueue();updateStats();switchTab('queue');
   showAlert(`✓ "${t.name}" back in queue with ${fmt(t.elapsed)} already logged.`,'success');
 }
-function deleteRecent(id){recent=recent.filter(x=>x.id!==id);save('recent_v4',recent);renderRecentList();}
+function deleteRecent(id){recent=recent.filter(x=>x.id!==id);save('recent_v5',recent);renderRecentList();}
 
 // ── Tabs ──
 function switchTab(name){
@@ -473,9 +449,8 @@ function pickTask(id){
 }
 
 function resumeTask(id){
-  const t=queue.find(x=>x.id===id);
-  if(!t)return;
-  t.done=false;save('queue_v4',queue);
+  const t=queue.find(x=>x.id===id);if(!t)return;
+  t.done=false;save('queue_v5',queue);
   pickTask(id);renderQueue();updateStats();
   showAlert(`"${t.name}" reopened.`,'info');
 }
@@ -489,7 +464,7 @@ function startTimer(){
     const t2=queue.find(x=>x.id===activeId);if(!t2)return;
     t2.elapsed=Math.floor((Date.now()-startedAt)/1000);
     updateClockDisplay(t2.elapsed);
-    if(t2.elapsed%10===0)save('queue_v4',queue);
+    if(t2.elapsed%10===0)save('queue_v5',queue);
   },500);
   setStatus('running');
   document.getElementById('startBtn').textContent='▶ RUNNING';
@@ -503,7 +478,7 @@ function startTimer(){
 function pauseTimer(){
   if(state!=='running')return;
   clearInterval(interval);interval=null;state='paused';
-  save('queue_v4',queue);setStatus('paused');
+  save('queue_v5',queue);setStatus('paused');
   document.getElementById('startBtn').textContent='▶ RESUME';
   document.getElementById('startBtn').disabled=false;
   document.getElementById('pauseBtn').disabled=true;
@@ -515,11 +490,11 @@ function doneTask(){
   if(!activeId)return;
   clearInterval(interval);interval=null;
   const t=queue.find(x=>x.id===activeId);if(!t)return;
-  t.done=true;save('queue_v4',queue);
+  t.done=true;save('queue_v5',queue);
   const ex=recent.find(r=>r.name.toLowerCase()===t.name.toLowerCase());
   if(ex){ex.elapsed=t.elapsed;ex.client=t.client;}else{recent.push({...t});}
   if(recent.length>20)recent=recent.slice(-20);
-  save('recent_v4',recent);
+  save('recent_v5',recent);
   state='idle';activeId=null;
   document.getElementById('activeName').textContent='— SELECT A TASK →';
   document.getElementById('activeClient').textContent='';
@@ -534,8 +509,18 @@ function doneTask(){
 }
 
 function removeFromQueue(id){
-  if(id===activeId){clearInterval(interval);interval=null;state='idle';activeId=null;document.getElementById('activeName').textContent='— SELECT A TASK →';document.getElementById('activeClient').textContent='';updateClockDisplay(0);document.getElementById('startBtn').textContent='▶ START';['startBtn','pauseBtn','doneBtn'].forEach(b=>document.getElementById(b).disabled=true);document.getElementById('timerCard').classList.remove('active');document.body.classList.remove('running');setStatus('idle');}
-  queue=queue.filter(t=>t.id!==id);save('queue_v4',queue);renderQueue();updateStats();
+  if(id===activeId){
+    clearInterval(interval);interval=null;state='idle';activeId=null;
+    document.getElementById('activeName').textContent='— SELECT A TASK →';
+    document.getElementById('activeClient').textContent='';
+    updateClockDisplay(0);
+    document.getElementById('startBtn').textContent='▶ START';
+    ['startBtn','pauseBtn','doneBtn'].forEach(b=>document.getElementById(b).disabled=true);
+    document.getElementById('timerCard').classList.remove('active');
+    document.body.classList.remove('running');
+    setStatus('idle');
+  }
+  queue=queue.filter(t=>t.id!==id);save('queue_v5',queue);renderQueue();updateStats();
 }
 
 // ── Edit Time ──
@@ -558,7 +543,7 @@ function saveEditedTime(){
   const s=parseInt(document.getElementById('editS').value)||0;
   const total=h*3600+m*60+s;
   const t=queue.find(x=>x.id===editingId);
-  if(t){t.elapsed=total;save('queue_v4',queue);}
+  if(t){t.elapsed=total;save('queue_v5',queue);}
   if(editingId===activeId){startedAt=Date.now()-(total*1000);updateClockDisplay(total);}
   renderQueue();updateStats();closeModal();
   showAlert('✓ Time updated.','success');
@@ -566,6 +551,9 @@ function saveEditedTime(){
 document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
 
 // ── End of Day Submit ──
+// Uses the exact working format confirmed by direct testing:
+// parent.data_source_id = "dee9aa65-c76b-825a-8755-0785a85d9bef"
+// properties: { "Task": "name", "Month": "March", "Clients": "client name" }
 async function submitToNotion(){
   const done=queue.filter(t=>t.done);
   if(!done.length)return;
@@ -575,25 +563,36 @@ async function submitToNotion(){
   document.getElementById('submitBtn').disabled=true;
   showAlert('Submitting to Notion…','info');
 
-  let ok=0,fail=0;
+  let ok=0, fail=0;
   for(const t of done){
-    try{
-      if(!t.notionId){
-        // New task — create in Notion
-        const r=await createNotionTask(t.name,t.month||null,t.client||null);
-        if(r.success)ok++;else fail++;
-      } else {
-        // Was pulled from Notion — already exists, just count it
-        ok++;
-      }
-    }catch(e){fail++;}
+    // Tasks pulled from Notion already exist — don't duplicate
+    if(t.notionId){ ok++; continue; }
+
+    try {
+      const pages = [{ properties: { "Task": t.name } }];
+      if(t.month) pages[0].properties["Month"] = t.month;
+
+      const raw = await callClaude(
+        `Create a new page in Drew's Tasks Notion database using the notion-create-pages tool.
+Use data_source_id parent: "${TASKS_DS_ID}"
+Set these properties exactly as provided. Task is a title field. Month is a select field.
+If Clients value is provided, find the matching client in Drew's Clients database by name and set the Clients relation.
+Reply ONLY with JSON: {"success":true} or {"success":false,"error":"..."}`,
+        JSON.stringify({ task: t.name, month: t.month||null, client: t.client||null })
+      );
+      const result = JSON.parse(raw);
+      if(result.success) ok++; else fail++;
+    } catch(e){ fail++; }
   }
 
-  queue=queue.filter(t=>!t.done);save('queue_v4',queue);
+  // Clear done tasks regardless
+  queue=queue.filter(t=>!t.done);
+  save('queue_v5',queue);
   renderQueue();updateStats();
   document.getElementById('submitBtn').textContent='SUBMIT DAY TO NOTION';
-  if(fail===0)showAlert(`✓ ${ok} task(s) submitted to Notion!`,'success');
-  else showAlert(`${ok} submitted, ${fail} failed. Try again.`,'warn');
+
+  if(fail===0) showAlert(`✓ ${ok} task(s) submitted to Notion!`,'success');
+  else showAlert(`${ok} submitted, ${fail} failed. Make sure you're on claude.ai and try again.`,'warn');
 }
 
 // ── Helpers ──
@@ -605,7 +604,7 @@ function p(n){return String(n).padStart(2,'0');}
 function setStatus(s){document.getElementById('dot').className='status-dot '+s;document.getElementById('statusTxt').textContent={idle:'IDLE',running:'RUNNING',paused:'PAUSED'}[s];}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;').replace(/"/g,'&quot;');}
 let _at;
-function showAlert(msg,type){const el=document.getElementById('alert');el.style.display='block';el.textContent=msg;const s={success:{bg:'rgba(71,255,176,.07)',b:'rgba(71,255,176,.25)',c:'#47ffb0'},info:{bg:'rgba(71,200,255,.06)',b:'rgba(71,200,255,.2)',c:'#47c8ff'},warn:{bg:'rgba(255,71,71,.07)',b:'rgba(255,71,71,.25)',c:'#ff6b6b'}}[type]||{};Object.assign(el.style,{background:s.bg,border:`1px solid ${s.b}`,color:s.c});clearTimeout(_at);_at=setTimeout(()=>el.style.display='none',6000);}
+function showAlert(msg,type){const el=document.getElementById('alert');el.style.display='block';el.textContent=msg;const s={success:{bg:'rgba(71,255,176,.07)',b:'rgba(71,255,176,.25)',c:'#47ffb0'},info:{bg:'rgba(71,200,255,.06)',b:'rgba(71,200,255,.2)',c:'#47c8ff'},warn:{bg:'rgba(255,71,71,.07)',b:'rgba(255,71,71,.25)',c:'#ff6b6b'}}[type]||{};Object.assign(el.style,{background:s.bg,border:`1px solid ${s.b}`,color:s.c});clearTimeout(_at);_at=setTimeout(()=>el.style.display='none',7000);}
 
 // ── Init ──
 renderQueue();updateStats();
