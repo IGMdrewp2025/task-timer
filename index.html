@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Drew's Task Timer</title>
 <meta name="application-name" content="Task Timer">
-<meta name="description" content="Drew's Notion Task Timer">
 <meta name="theme-color" content="#0a0a0a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,124 +12,177 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#0a0a0a; --surface:#111; --surface2:#161616;
-  --border:#1e1e1e; --border2:#2a2a2a;
-  --accent:#e8ff47; --accent2:#47c8ff;
-  --text:#f0f0f0; --muted:#4a4a4a; --muted2:#666;
-  --danger:#ff4747; --green:#47ffb0; --r:10px;
+:root{
+  --bg:#0a0a0a;--surface:#111;--surface2:#161616;--surface3:#1a1a1a;
+  --border:#1e1e1e;--border2:#2a2a2a;--border3:#333;
+  --accent:#e8ff47;--accent2:#47c8ff;--accent3:#ff9f47;
+  --text:#f0f0f0;--muted:#4a4a4a;--muted2:#666;--muted3:#888;
+  --danger:#ff4747;--green:#47ffb0;--r:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden}
-body::before{content:'';position:fixed;top:-300px;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(232,255,71,.05) 0%,transparent 65%);pointer-events:none;z-index:0;transition:background 1s}
-body.running::before{background:radial-gradient(circle,rgba(71,200,255,.07) 0%,transparent 65%)}
+body::before{content:'';position:fixed;top:-300px;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(232,255,71,.04) 0%,transparent 65%);pointer-events:none;z-index:0;transition:background 1s}
+body.running::before{background:radial-gradient(circle,rgba(71,200,255,.06) 0%,transparent 65%)}
 .app{display:flex;min-height:100vh;position:relative;z-index:1}
-.left{flex:0 0 300px;padding:26px 20px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:13px;position:sticky;top:0;height:100vh;overflow-y:auto}
-.right{flex:1;padding:26px 22px;display:flex;flex-direction:column;gap:13px;min-width:0}
-.logo{font-family:'Bebas Neue',sans-serif;font-size:21px;letter-spacing:3px;color:var(--accent);line-height:1}
-.logo span{display:block;color:var(--muted2);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;margin-top:3px}
+.left{flex:0 0 310px;padding:24px 20px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:12px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.right{flex:1;padding:24px 22px;display:flex;flex-direction:column;min-width:0;overflow-y:auto;max-height:100vh}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--accent);line-height:1}
+.logo span{display:block;color:var(--muted2);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;margin-top:2px}
 
-/* timer */
-.timer-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 17px;position:relative;overflow:hidden;transition:border-color .4s}
+/* Timer */
+.timer-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 16px;position:relative;overflow:hidden;transition:border-color .4s}
 .timer-card.active{border-color:rgba(71,200,255,.4)}
 .timer-glow{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent2),transparent);opacity:0;transition:opacity .5s}
 .timer-card.active .timer-glow{opacity:1}
-.task-label{font-size:10px;letter-spacing:2px;color:var(--muted2);text-transform:uppercase;margin-bottom:5px}
-.task-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--text);min-height:22px;line-height:1.1;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.task-client{font-size:11px;color:var(--muted2);margin-bottom:16px;min-height:14px}
-.time-display{font-family:'Bebas Neue',sans-serif;font-size:62px;letter-spacing:3px;line-height:1;color:var(--accent);margin-bottom:6px;transition:color .4s,text-shadow .4s;text-shadow:0 0 28px rgba(232,255,71,.15)}
-.timer-card.active .time-display{color:var(--accent2);text-shadow:0 0 28px rgba(71,200,255,.2)}
-.status-row{display:flex;align-items:center;gap:8px;margin-bottom:16px}
-.status-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .3s,box-shadow .3s}
-.status-dot.running{background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 1.5s infinite}
+.task-label{font-size:9px;letter-spacing:2px;color:var(--muted2);text-transform:uppercase;margin-bottom:4px}
+.task-name{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;color:var(--text);min-height:20px;line-height:1.1;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.task-client{font-size:10px;color:var(--muted2);margin-bottom:14px;min-height:13px}
+.time-display{font-family:'Bebas Neue',sans-serif;font-size:58px;letter-spacing:3px;line-height:1;color:var(--accent);margin-bottom:3px;transition:color .4s,text-shadow .4s;text-shadow:0 0 25px rgba(232,255,71,.12);cursor:pointer}
+.timer-card.active .time-display{color:var(--accent2);text-shadow:0 0 25px rgba(71,200,255,.18)}
+.time-display:hover{opacity:.8}
+.time-edit-hint{font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:8px}
+.status-row{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--muted);transition:background .3s,box-shadow .3s}
+.status-dot.running{background:var(--green);box-shadow:0 0 7px var(--green);animation:pulse 1.5s infinite}
 .status-dot.paused{background:var(--accent)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-.status-text{font-size:11px;color:var(--muted2);letter-spacing:1.5px}
-.controls{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.btn{padding:9px 12px;border-radius:7px;border:1px solid var(--border2);font-family:'DM Mono',monospace;font-size:11px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:5px}
-.btn:disabled{opacity:.28;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+.status-text{font-size:10px;color:var(--muted2);letter-spacing:1.5px}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+
+/* Buttons */
+.btn{padding:9px 10px;border-radius:7px;border:1px solid var(--border2);font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}
+.btn:disabled{opacity:.25;cursor:not-allowed;transform:none!important;box-shadow:none!important}
 .btn-primary{background:var(--accent);color:#0a0a0a;border-color:var(--accent)}
-.btn-primary:hover:not(:disabled){background:#f0ff60;transform:translateY(-1px);box-shadow:0 4px 14px rgba(232,255,71,.22)}
+.btn-primary:hover:not(:disabled){background:#f0ff60;transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,255,71,.2)}
 .btn-secondary{background:transparent;color:var(--text)}
 .btn-secondary:hover:not(:disabled){background:rgba(255,255,255,.04)}
-.btn-danger{background:transparent;color:var(--danger);border-color:rgba(255,71,71,.25);grid-column:span 2}
-.btn-danger:hover:not(:disabled){background:rgba(255,71,71,.08);border-color:var(--danger)}
+.btn-danger{background:transparent;color:var(--danger);border-color:rgba(255,71,71,.2);grid-column:span 2}
+.btn-danger:hover:not(:disabled){background:rgba(255,71,71,.07);border-color:var(--danger)}
+.btn-submit{width:100%;padding:12px;border-radius:8px;background:transparent;color:var(--green);border:1px solid rgba(71,255,176,.3);font-family:'DM Mono',monospace;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-submit:hover:not(:disabled){background:rgba(71,255,176,.08);border-color:var(--green)}
+.btn-submit:disabled{opacity:.25;cursor:not-allowed}
 
-/* install */
-.install-prompt{background:linear-gradient(135deg,rgba(232,255,71,.08),rgba(232,255,71,.03));border:1px solid rgba(232,255,71,.2);border-radius:var(--r);padding:14px 15px}
-.install-prompt-title{font-size:10px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.install-prompt p{font-size:10px;color:var(--muted2);line-height:1.8}
-.install-prompt b{color:var(--text);font-weight:500}
-.install-prompt code{background:rgba(255,255,255,.06);padding:1px 5px;border-radius:3px;font-size:9px;color:var(--accent2)}
-.btn-install-big{width:100%;padding:12px;border-radius:8px;background:var(--accent);color:#0a0a0a;border:none;font-family:'DM Mono',monospace;font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .15s;animation:installPulse 2.5s ease-in-out infinite;display:none}
-.btn-install-big.show{display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-install-big:hover{background:#f0ff60;transform:translateY(-1px)}
-@keyframes installPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,255,71,0)}50%{box-shadow:0 0 0 6px rgba(232,255,71,.15)}}
+/* Install */
+.btn-install{width:100%;padding:10px;border-radius:8px;background:var(--accent);color:#0a0a0a;border:none;font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .2s;animation:installPulse 2.5s ease-in-out infinite;display:none;align-items:center;justify-content:center;gap:6px}
+.btn-install.show{display:flex}
+@keyframes installPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,255,71,0)}50%{box-shadow:0 0 0 5px rgba(232,255,71,.12)}}
 
-/* section */
-.section-header{display:flex;align-items:center;justify-content:space-between}
-.section-label{font-size:10px;letter-spacing:2px;color:var(--muted2);text-transform:uppercase}
+/* Stats */
+.day-summary{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
+.day-summary-title{font-size:9px;letter-spacing:2px;color:var(--muted2);text-transform:uppercase;margin-bottom:10px}
+.day-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.day-stat{text-align:center}
+.day-stat-val{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--accent);line-height:1;margin-bottom:2px}
+.day-stat-label{font-size:9px;color:var(--muted2);letter-spacing:1px;text-transform:uppercase}
 
-/* add task */
-.add-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
-.add-toggle{width:100%;padding:12px 15px;background:none;border:none;color:var(--accent);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .2s}
+/* Submit */
+.submit-section{background:var(--surface);border:1px solid rgba(71,255,176,.15);border-radius:var(--r);padding:14px 16px}
+.submit-title{font-size:9px;letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:5px}
+.submit-desc{font-size:10px;color:var(--muted2);line-height:1.7;margin-bottom:10px}
+
+/* Tabs */
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:16px;flex-shrink:0}
+.tab{padding:10px 14px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:#0a0a0a;border-radius:10px;font-size:9px;font-weight:500;padding:0 5px;min-width:16px;height:16px;margin-left:5px}
+.panel{display:none;flex-direction:column;gap:10px}
+.panel.active{display:flex}
+
+/* Add Task */
+.add-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;flex-shrink:0}
+.add-toggle{width:100%;padding:11px 14px;background:none;border:none;color:var(--accent);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:7px;transition:background .2s}
 .add-toggle:hover{background:rgba(232,255,71,.04)}
-.plus{font-size:15px;font-weight:300}
-.add-form{padding:0 15px 15px;display:none;flex-direction:column;gap:9px;border-top:1px solid var(--border)}
+.add-form{padding:0 14px 14px;display:none;flex-direction:column;gap:8px;border-top:1px solid var(--border)}
 .add-form.open{display:flex}
-.flabel{font-size:10px;letter-spacing:1.5px;color:var(--muted2);text-transform:uppercase;padding-top:6px}
-.finput,.fselect{background:var(--bg);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:9px 11px;outline:none;width:100%;transition:border-color .2s}
+.flabel{font-size:9px;letter-spacing:1.5px;color:var(--muted2);text-transform:uppercase;padding-top:5px}
+.finput,.fselect{background:var(--bg);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:8px 10px;outline:none;width:100%;transition:border-color .2s}
 .finput:focus,.fselect:focus{border-color:var(--accent)}
 .fselect option{background:#1a1a1a}
-.faction{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:3px}
+.faction{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:2px}
 .btn-add{background:var(--accent);color:#0a0a0a;border-color:var(--accent)}
 .btn-add:hover:not(:disabled){background:#f0ff60}
-.btn-cancel{background:transparent;color:var(--muted2);border-color:var(--border2)}
-.btn-cancel:hover{color:var(--text)}
+.btn-cancel-form{background:transparent;color:var(--muted2);border-color:var(--border2)}
 
-/* alert */
-.alert{border-radius:7px;padding:9px 13px;font-size:11px;display:none}
-
-/* task list */
-.tlist{display:flex;flex-direction:column;gap:5px}
-.titem{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:11px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .18s}
-.titem:hover{border-color:var(--border2);background:var(--surface2)}
-.titem.sel{border-color:rgba(71,200,255,.45);background:rgba(71,200,255,.04)}
+/* Task items */
+.titem{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:9px;transition:all .18s;position:relative}
+.titem.clickable{cursor:pointer}
+.titem.clickable:hover{border-color:var(--border2);background:var(--surface2)}
+.titem.sel{border-color:rgba(71,200,255,.4);background:rgba(71,200,255,.04)}
+.titem.running-item .tdot{background:var(--green);box-shadow:0 0 5px var(--green);animation:pulse 1.5s infinite}
 .tdot{width:5px;height:5px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .2s}
-.titem:hover .tdot{background:var(--muted2)}
-.titem.sel .tdot{background:var(--accent2)}
+.titem.clickable:hover .tdot,.titem.sel .tdot{background:var(--accent2)}
 .tcontent{flex:1;min-width:0}
-.tname{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.tname{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px}
 .tmeta{font-size:10px;color:var(--muted2)}
-.tbadge{font-size:11px;color:var(--muted2);flex-shrink:0}
+.tright{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.tbadge{font-size:11px;color:var(--muted3);font-family:'Bebas Neue',monospace;letter-spacing:1px}
+.tactions{display:flex;gap:4px;opacity:0;transition:opacity .15s}
+.titem:hover .tactions{opacity:1}
+.taction{width:24px;height:24px;border-radius:5px;border:1px solid var(--border2);background:transparent;color:var(--muted2);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.taction:hover{border-color:var(--border3);color:var(--text);background:var(--surface3)}
+.taction.del:hover{border-color:rgba(255,71,71,.4);color:var(--danger);background:rgba(255,71,71,.07)}
 
-.loading-row{display:flex;align-items:center;gap:10px;color:var(--muted2);font-size:12px;padding:14px 0}
-.spinner{width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:24px;width:300px}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--text);margin-bottom:4px}
+.modal-sub{font-size:10px;color:var(--muted2);margin-bottom:20px}
+.time-inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
+.time-input-wrap{text-align:center}
+.time-input{background:var(--bg);border:1px solid var(--border2);border-radius:6px;color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:28px;padding:10px 4px;outline:none;width:100%;text-align:center;transition:border-color .2s}
+.time-input:focus{border-color:var(--accent)}
+.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn-save{background:var(--accent);color:#0a0a0a;border-color:var(--accent)}
+.btn-save:hover{background:#f0ff60}
+.btn-modal-cancel{background:transparent;color:var(--muted2);border-color:var(--border2)}
+
+/* Alert */
+.alert{border-radius:7px;padding:8px 12px;font-size:10px;display:none;line-height:1.5}
+.sdivider{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;padding:4px 0;border-bottom:1px solid var(--border);margin-bottom:6px}
+.empty{color:var(--muted2);font-size:11px;padding:16px 0;text-align:center}
+.recent-badge{font-size:9px;padding:1px 5px;border-radius:3px;background:rgba(255,159,71,.1);border:1px solid rgba(255,159,71,.2);color:var(--accent3);margin-left:5px;vertical-align:middle}
+.loading-row{display:flex;align-items:center;gap:8px;color:var(--muted2);font-size:11px;padding:12px 0}
+.spinner{width:13px;height:13px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
-.empty{color:var(--muted2);font-size:12px;padding:14px 0}
-
-::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-
-@media(max-width:640px){.app{flex-direction:column}.left{position:static;height:auto;flex:none;border-right:none;border-bottom:1px solid var(--border)}}
+@media(max-width:700px){.app{flex-direction:column}.left{position:static;height:auto;flex:none;border-right:none;border-bottom:1px solid var(--border)}}
 </style>
 </head>
 <body>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-title">EDIT TIME</div>
+    <div class="modal-sub" id="modalTaskName">—</div>
+    <div class="time-inputs">
+      <div class="time-input-wrap"><div class="flabel">HRS</div><input class="time-input" id="editH" type="number" min="0" max="23" value="0"></div>
+      <div class="time-input-wrap"><div class="flabel">MIN</div><input class="time-input" id="editM" type="number" min="0" max="59" value="0"></div>
+      <div class="time-input-wrap"><div class="flabel">SEC</div><input class="time-input" id="editS" type="number" min="0" max="59" value="0"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-save" onclick="saveEditedTime()">SAVE TIME</button>
+      <button class="btn btn-modal-cancel" onclick="closeModal()">CANCEL</button>
+    </div>
+  </div>
+</div>
+
 <div class="app">
   <div class="left">
     <div class="logo">TIMER <span>DREW'S TASK TRACKER</span></div>
     <div id="alert" class="alert"></div>
-
-    <!-- PWA install button — shown automatically when available -->
-    <button class="btn-install-big" id="installBtn">🖥️ INSTALL AS DESKTOP APP</button>
+    <button class="btn-install" id="installBtn">🖥️ INSTALL AS DESKTOP APP</button>
 
     <div class="timer-card" id="timerCard">
       <div class="timer-glow"></div>
       <div class="task-label">ACTIVE TASK</div>
-      <div class="task-name" id="activeName">— NO TASK SELECTED —</div>
+      <div class="task-name" id="activeName">— SELECT A TASK →</div>
       <div class="task-client" id="activeClient"></div>
-      <div class="time-display" id="clock">00:00:00</div>
+      <div class="time-display" id="clock" onclick="openEditModal()" title="Click to edit time">00:00:00</div>
+      <div class="time-edit-hint">CLICK TIME TO EDIT</div>
       <div class="status-row">
         <div class="status-dot" id="dot"></div>
         <div class="status-text" id="statusTxt">IDLE</div>
@@ -138,200 +190,320 @@ body.running::before{background:radial-gradient(circle,rgba(71,200,255,.07) 0%,t
       <div class="controls">
         <button class="btn btn-primary" id="startBtn" onclick="startTimer()" disabled>▶ START</button>
         <button class="btn btn-secondary" id="pauseBtn" onclick="pauseTimer()" disabled>⏸ PAUSE</button>
-        <button class="btn btn-danger" id="stopBtn" onclick="stopTimer()" disabled>■ COMPLETE</button>
+        <button class="btn btn-danger" id="doneBtn" onclick="doneTask()" disabled>✓ DONE W/ TASK</button>
       </div>
     </div>
 
-    <div class="install-prompt">
-      <div class="install-prompt-title">🖥️ Desktop App Install</div>
-      <p>
-        <b>Option A — GitHub Pages (best):</b><br>
-        Upload this file as <code>index.html</code> to a public GitHub repo → enable Pages → open the URL in Chrome → install button appears above.<br><br>
-        <b>Option B — Chrome right now:</b><br>
-        Open this file in Chrome → click <code>⋮</code> → <i>Cast, save and share</i> → <i>Install page as app</i>
-      </p>
+    <div class="day-summary">
+      <div class="day-summary-title">TODAY'S QUEUE</div>
+      <div class="day-stats">
+        <div class="day-stat"><div class="day-stat-val" id="statTasks">0</div><div class="day-stat-label">TASKS</div></div>
+        <div class="day-stat"><div class="day-stat-val" id="statDone">0</div><div class="day-stat-label">DONE</div></div>
+        <div class="day-stat"><div class="day-stat-val" id="statTime">0m</div><div class="day-stat-label">TOTAL</div></div>
+      </div>
+    </div>
+
+    <div class="submit-section">
+      <div class="submit-title">⬆ END OF DAY SUBMIT</div>
+      <div class="submit-desc">Submit all completed tasks to Notion at once when you're done for the day.</div>
+      <button class="btn-submit" id="submitBtn" onclick="submitToNotion()" disabled>SUBMIT DAY TO NOTION</button>
     </div>
   </div>
 
   <div class="right">
-    <div class="section-header">
-      <div class="section-label">YOUR TASKS</div>
-      <button class="btn btn-secondary" style="padding:6px 11px;font-size:10px;letter-spacing:1px" onclick="loadTasks()">⟳ REFRESH</button>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('queue')" id="tab-queue">QUEUE <span class="tab-badge" id="badge-queue">0</span></div>
+      <div class="tab" onclick="switchTab('notion')" id="tab-notion">NOTION TASKS</div>
+      <div class="tab" onclick="switchTab('recent')" id="tab-recent">RECENT <span class="tab-badge" id="badge-recent" style="background:var(--accent3)">0</span></div>
     </div>
 
-    <div class="add-panel">
-      <button class="add-toggle" onclick="toggleForm()">
-        <span class="plus" id="plusIcon">+</span>
-        <span id="toggleLabel">ADD NEW TASK TO NOTION</span>
-      </button>
-      <div class="add-form" id="addForm">
-        <div><div class="flabel">Task Name *</div><input class="finput" id="newName" type="text" placeholder="e.g. Edit Masters reel"></div>
-        <div>
-          <div class="flabel">Client</div>
-          <select class="fselect" id="newClient">
-            <option value="">— No client —</option>
-            <option value="https://www.notion.so/5169aa65c76b8254bf0d8124f28063b8">Bryson DeChambeau</option>
-            <option value="https://www.notion.so/2179aa65c76b8268af928189afd55a80">Crushers GC</option>
-            <option value="https://www.notion.so/4279aa65c76b828a87a90127dc93cb96">Reebok Golf</option>
-            <option value="https://www.notion.so/e839aa65c76b8390b690015be3776304">LIV Golf</option>
-            <option value="https://www.notion.so/bf39aa65c76b8320a63c011ddf200aae">ICON GLOBAL MEDIA</option>
-          </select>
-        </div>
-        <div>
-          <div class="flabel">Month</div>
-          <select class="fselect" id="newMonth">
-            <option value="">— Select month —</option>
-            <option>January</option><option>February</option><option>March</option>
-            <option>April</option><option>May</option><option>June</option>
-            <option>July</option><option>August</option><option>September</option>
-            <option>October</option><option>November</option><option>December</option>
-          </select>
-        </div>
-        <div class="faction">
-          <button class="btn btn-add" id="addBtn" onclick="addTask()">+ ADD TO NOTION</button>
-          <button class="btn btn-cancel" onclick="toggleForm()">CANCEL</button>
+    <!-- QUEUE -->
+    <div class="panel active" id="panel-queue">
+      <div class="add-panel">
+        <button class="add-toggle" onclick="toggleForm()">
+          <span id="plusIcon">+</span>
+          <span id="toggleLabel">ADD TASK TO TODAY'S QUEUE</span>
+        </button>
+        <div class="add-form" id="addForm">
+          <div><div class="flabel">Task Name *</div><input class="finput" id="newName" type="text" placeholder="e.g. Edit Masters reel"></div>
+          <div><div class="flabel">Client</div>
+            <select class="fselect" id="newClient">
+              <option value="">— No client —</option>
+              <option value="https://www.notion.so/5169aa65c76b8254bf0d8124f28063b8">Bryson DeChambeau</option>
+              <option value="https://www.notion.so/2179aa65c76b8268af928189afd55a80">Crushers GC</option>
+              <option value="https://www.notion.so/4279aa65c76b828a87a90127dc93cb96">Reebok Golf</option>
+              <option value="https://www.notion.so/e839aa65c76b8390b690015be3776304">LIV Golf</option>
+              <option value="https://www.notion.so/bf39aa65c76b8320a63c011ddf200aae">ICON GLOBAL MEDIA</option>
+            </select>
+          </div>
+          <div><div class="flabel">Month</div>
+            <select class="fselect" id="newMonth">
+              <option value="">— Select month —</option>
+              <option>January</option><option>February</option><option>March</option>
+              <option>April</option><option>May</option><option>June</option>
+              <option>July</option><option>August</option><option>September</option>
+              <option>October</option><option>November</option><option>December</option>
+            </select>
+          </div>
+          <div class="faction">
+            <button class="btn btn-add" onclick="addToQueue()">+ ADD TO QUEUE</button>
+            <button class="btn btn-cancel-form" onclick="toggleForm()">CANCEL</button>
+          </div>
         </div>
       </div>
+      <div class="sdivider">IN PROGRESS / QUEUED</div>
+      <div id="queueActive"></div>
+      <div class="sdivider" id="doneDiv" style="display:none">COMPLETED TODAY</div>
+      <div id="queueDone"></div>
     </div>
 
-    <div id="taskList"><div class="loading-row"><div class="spinner"></div>Loading tasks from Notion…</div></div>
+    <!-- NOTION TASKS -->
+    <div class="panel" id="panel-notion">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <div style="font-size:10px;color:var(--muted2);line-height:1.7">Your active Notion tasks. Click any to add to today's queue.</div>
+        <button class="btn btn-secondary" style="padding:5px 10px;font-size:9px;letter-spacing:1px;flex-shrink:0;margin-left:10px" onclick="loadNotionTasks()">⟳ REFRESH</button>
+      </div>
+      <div id="notionList"><div class="loading-row"><div class="spinner"></div>Loading from Notion…</div></div>
+    </div>
+
+    <!-- RECENT -->
+    <div class="panel" id="panel-recent">
+      <div style="font-size:10px;color:var(--muted2);padding:2px 0 8px;line-height:1.7">Tasks you've worked on recently. Click to resume without creating a duplicate in Notion.</div>
+      <div id="recentList"></div>
+    </div>
   </div>
 </div>
 
 <script>
-// ── PWA Install ──
-let deferredPrompt = null;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('installBtn').classList.add('show');
-});
-document.getElementById('installBtn').addEventListener('click', async () => {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  if (outcome === 'accepted') { document.getElementById('installBtn').classList.remove('show'); showAlert('✓ Installed! Check your Start Menu or Dock.','success'); }
-  deferredPrompt = null;
-});
-window.addEventListener('appinstalled', () => document.getElementById('installBtn').classList.remove('show'));
+// ── PWA ──
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBtn').classList.add('show');});
+document.getElementById('installBtn').addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();const{outcome}=await deferredPrompt.userChoice;if(outcome==='accepted')document.getElementById('installBtn').classList.remove('show');deferredPrompt=null;});
+if('serviceWorker'in navigator){const sw=`self.addEventListener('fetch',e=>e.respondWith(fetch(e.request).catch(()=>caches.match(e.request))))`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'})),{scope:'./'}).catch(()=>{});}
 
-// Service worker for PWA installability
-if ('serviceWorker' in navigator) {
-  const sw = `self.addEventListener('fetch',e=>e.respondWith(fetch(e.request).catch(()=>caches.match(e.request))))`;
-  navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'})),{scope:'./'}).catch(()=>{});
+// ── Storage ──
+function load(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}}
+function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
+
+let queue=load('queue_v4',[]);
+let recent=load('recent_v4',[]);
+let notionTasksCache=[];
+
+// ── Claude API (routes all Notion calls through Claude's auth) ──
+async function callClaude(systemPrompt, userMessage) {
+  const resp = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
+      system: systemPrompt,
+      messages: [{role:"user", content: userMessage}],
+      mcp_servers: [{type:"url", url:"https://mcp.notion.com/mcp", name:"notion-mcp"}]
+    })
+  });
+  const data = await resp.json();
+  const text = data.content?.find(b=>b.type==="text")?.text || "";
+  return text.replace(/```json|```/g,"").trim();
 }
 
-// ── State ──
-let tasks=[], selected=null, state='idle', elapsed=0, interval=null, startedAt=null;
-
-// Auto month
-(()=>{ const m=['January','February','March','April','May','June','July','August','September','October','November','December']; const cur=m[new Date().getMonth()]; for(const o of document.getElementById('newMonth').options) if(o.value===cur){o.selected=true;break;} })();
-
-// ── Load Tasks via Claude+Notion ──
-// NOTE: This works when opened inside claude.ai (where Notion auth is active).
-// For the standalone desktop app, use the GitHub Pages approach so the auth token persists.
-async function loadTasks() {
-  document.getElementById('taskList').innerHTML='<div class="loading-row"><div class="spinner"></div>Loading tasks from Notion…</div>';
+// ── Load Notion Tasks ──
+async function loadNotionTasks() {
+  document.getElementById('notionList').innerHTML='<div class="loading-row"><div class="spinner"></div>Loading from Notion…</div>';
   try {
-    const resp = await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({
-        model:"claude-sonnet-4-20250514", max_tokens:2000,
-        system:`Query Drew's Tasks Notion database using the pre-filtered active tasks view at URL: https://www.notion.so/cb69aa65c76b83478e5b81ccd3754ef5?v=c599aa65c76b82459cde88619695ab9a
-Return ONLY a JSON array (no markdown, no explanation). Each item: {"id":"<page url>","name":"<Task name>","month":"<Month or empty>","timeSpent":"<Time Spent formula value or empty>"}.
-Only include top-level tasks (no Parent item). Max 40 items.`,
-        messages:[{role:"user",content:"List active tasks."}],
-        mcp_servers:[{type:"url",url:"https://mcp.notion.com/mcp",name:"notion-mcp"}]
-      })
-    });
-    const data = await resp.json();
-    const txt = (data.content?.find(b=>b.type==="text")?.text||"[]").replace(/```json|```/g,"").trim();
-    tasks = JSON.parse(txt);
-    renderList();
+    const raw = await callClaude(
+      `Query the active tasks view from Drew's Tasks Notion database at: https://www.notion.so/cb69aa65c76b83478e5b81ccd3754ef5?v=c599aa65c76b82459cde88619695ab9a
+Return ONLY a JSON array, no markdown. Each item: {"id":"<page url>","name":"<Task title>","month":"<Month or empty>","client":"<client name or empty>"}. Exclude any task that has a Parent item. Max 40.`,
+      "List active tasks."
+    );
+    notionTasksCache = JSON.parse(raw);
+    renderNotionList();
   } catch(e) {
-    document.getElementById('taskList').innerHTML='<div class="empty">⚠ Could not load tasks. Make sure you\'re using this inside claude.ai, then click Refresh.</div>';
+    document.getElementById('notionList').innerHTML='<div class="empty">⚠ Could not load. Make sure you\'re accessing this from claude.ai, then retry.</div>';
   }
 }
 
-function renderList() {
-  const el = document.getElementById('taskList');
-  if (!tasks.length) { el.innerHTML='<div class="empty">No active tasks found.</div>'; return; }
-  el.innerHTML = '<div class="tlist">'+tasks.map((t,i)=>`
-    <div class="titem ${selected?.id===t.id?'sel':''}" onclick="pick(${i})">
+function renderNotionList() {
+  const el=document.getElementById('notionList');
+  const inQueue=queue.map(t=>t.notionId).filter(Boolean);
+  const available=notionTasksCache.filter(t=>!inQueue.includes(t.id));
+  if(!available.length){el.innerHTML='<div class="empty">All Notion tasks are in your queue, or none found.</div>';return;}
+  el.innerHTML=available.map(t=>`
+    <div class="titem clickable" onclick="addNotionTaskToQueue(${JSON.stringify(JSON.stringify(t))})">
       <div class="tdot"></div>
-      <div class="tcontent"><div class="tname">${esc(t.name)}</div><div class="tmeta">${esc(t.month||'—')}</div></div>
-      <div class="tbadge">${esc(t.timeSpent||'')}</div>
-    </div>`).join('')+'</div>';
+      <div class="tcontent"><div class="tname">${esc(t.name)}</div><div class="tmeta">${esc(t.client||t.month||'—')}</div></div>
+      <div class="tright"><div class="tactions" style="opacity:1"><button class="taction" style="color:var(--accent);border-color:rgba(232,255,71,.3)">+</button></div></div>
+    </div>`).join('');
 }
 
-// ── Add Task ──
-function toggleForm() {
-  const f=document.getElementById('addForm'), open=f.classList.toggle('open');
+function addNotionTaskToQueue(tJson) {
+  const t=JSON.parse(tJson);
+  addToQueueDirect(t.name,t.client,'',t.month,t.id);
+  switchTab('queue');
+}
+
+// ── Add Task to Notion via Claude ──
+async function createNotionTask(name, month, clientName) {
+  const raw = await callClaude(
+    `Create a new page in Drew's Tasks Notion database (https://www.notion.so/cb69aa65c76b83478e5b81ccd3754ef5).
+Set the Task title field. If month is provided, set the Month select field. If clientName is provided, find the matching client in Drew's Clients database and set the Clients relation.
+Reply ONLY with JSON: {"success":true,"id":"<new page url>"} or {"success":false,"error":"..."}`,
+    JSON.stringify({task:name, month:month||null, clientName:clientName||null})
+  );
+  return JSON.parse(raw);
+}
+
+// ── Queue ──
+function toggleForm(){
+  const f=document.getElementById('addForm'),open=f.classList.toggle('open');
   document.getElementById('plusIcon').textContent=open?'×':'+';
-  document.getElementById('toggleLabel').textContent=open?'CLOSE FORM':'ADD NEW TASK TO NOTION';
-  if(open) document.getElementById('newName').focus();
+  document.getElementById('toggleLabel').textContent=open?'CLOSE':'ADD TASK TO TODAY\'S QUEUE';
+  if(open)document.getElementById('newName').focus();
 }
 
-async function addTask() {
-  const name = document.getElementById('newName').value.trim();
+function addToQueue(){
+  const name=document.getElementById('newName').value.trim();
   if(!name){showAlert('Enter a task name.','warn');return;}
-  const month = document.getElementById('newMonth').value;
-  const cSel = document.getElementById('newClient');
-  const clientId = cSel.value, clientName = clientId ? cSel.selectedOptions[0]?.text : '';
-  const btn = document.getElementById('addBtn');
-  btn.textContent='…ADDING'; btn.disabled=true;
-  try {
-    const resp = await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({
-        model:"claude-sonnet-4-20250514", max_tokens:500,
-        system:`Create a new page in Drew's Tasks Notion database (https://www.notion.so/cb69aa65c76b83478e5b81ccd3754ef5). Set: Task title, Month select field (if provided), and Clients relation (if clientId provided — use the exact page URL as the relation target). Reply ONLY with JSON: {"success":true} or {"success":false,"error":"..."}`,
-        messages:[{role:"user",content:JSON.stringify({task:name,month:month||null,clientId:clientId||null,clientName:clientName||null})}],
-        mcp_servers:[{type:"url",url:"https://mcp.notion.com/mcp",name:"notion-mcp"}]
-      })
-    });
-    const data = await resp.json();
-    const txt = (data.content?.find(b=>b.type==="text")?.text||"{}").replace(/```json|```/g,"").trim();
-    const r = JSON.parse(txt);
-    if(r.success){
-      showAlert(`✓ "${name}" added to Notion!`,'success');
-      document.getElementById('newName').value='';
-      toggleForm(); setTimeout(loadTasks,900);
-    } else { showAlert('⚠ '+(r.error||'Could not add task.'),'warn'); }
-  } catch(e){ showAlert('⚠ Error. Try again.','warn'); }
-  btn.textContent='+ ADD TO NOTION'; btn.disabled=false;
+  const cSel=document.getElementById('newClient');
+  const clientId=cSel.value;
+  const clientName=clientId?cSel.selectedOptions[0]?.text:'';
+  const month=document.getElementById('newMonth').value;
+  addToQueueDirect(name,clientName,clientId,month,null);
+  document.getElementById('newName').value='';
+  toggleForm();
 }
-document.getElementById('newName').addEventListener('keydown',e=>{ if(e.key==='Enter') addTask(); });
+document.getElementById('newName').addEventListener('keydown',e=>{if(e.key==='Enter')addToQueue();});
+
+function addToQueueDirect(name,client,clientId,month,notionId){
+  if(queue.find(t=>!t.done&&t.name.toLowerCase()===name.toLowerCase())){showAlert(`"${name}" is already in your queue.`,'warn');return;}
+  const task={id:'q-'+Date.now(),name,client:client||'',clientId:clientId||'',month:month||'',elapsed:0,done:false,notionId:notionId||null};
+  queue.push(task);save('queue_v4',queue);
+  renderQueue();updateStats();
+  showAlert(`✓ "${name}" added to queue.`,'success');
+}
+
+function renderQueue(){
+  const active=queue.filter(t=>!t.done);
+  const done=queue.filter(t=>t.done);
+  document.getElementById('queueActive').innerHTML=active.length
+    ?active.map(t=>taskHTML(t,false)).join('')
+    :'<div class="empty">No tasks queued. Add one above or pull from Notion Tasks →</div>';
+  const dd=document.getElementById('doneDiv');
+  if(done.length){dd.style.display='';document.getElementById('queueDone').innerHTML=done.map(t=>taskHTML(t,true)).join('');}
+  else{dd.style.display='none';document.getElementById('queueDone').innerHTML='';}
+  document.getElementById('badge-queue').textContent=active.length;
+  document.getElementById('submitBtn').disabled=done.length===0;
+}
+
+function taskHTML(t,isDone){
+  const isActive=t.id===activeId;
+  const time=t.elapsed>0?fmt(t.elapsed):'';
+  return`<div class="titem clickable ${isActive?'running-item sel':''}">
+    <div class="tdot"></div>
+    <div class="tcontent" onclick="${isDone?`resumeTask('${t.id}')`:`pickTask('${t.id}')`}">
+      <div class="tname">${esc(t.name)}${isDone?'<span style="font-size:9px;color:var(--green);margin-left:6px">✓ DONE</span>':''}</div>
+      <div class="tmeta">${esc(t.client||t.month||'—')}</div>
+    </div>
+    <div class="tright">
+      ${time?`<div class="tbadge">${time}</div>`:''}
+      <div class="tactions">
+        <button class="taction" onclick="openEditModalFor('${t.id}')" title="Edit time">✎</button>
+        <button class="taction del" onclick="removeFromQueue('${t.id}')" title="Delete">✕</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Recent ──
+function renderRecentList(){
+  const el=document.getElementById('recentList');
+  document.getElementById('badge-recent').textContent=recent.length;
+  if(!recent.length){el.innerHTML='<div class="empty">No recent tasks yet.</div>';return;}
+  el.innerHTML=recent.slice().reverse().map(t=>`
+    <div class="titem clickable" onclick="resumeFromRecent('${t.id}')">
+      <div class="tdot"></div>
+      <div class="tcontent">
+        <div class="tname">${esc(t.name)}<span class="recent-badge">RECENT</span></div>
+        <div class="tmeta">${esc(t.client||t.month||'—')} · ${fmt(t.elapsed)} logged</div>
+      </div>
+      <div class="tright"><div class="tactions" style="opacity:1">
+        <button class="taction" style="color:var(--accent3);border-color:rgba(255,159,71,.3)">+</button>
+        <button class="taction del" onclick="event.stopPropagation();deleteRecent('${t.id}')">✕</button>
+      </div></div>
+    </div>`).join('');
+}
+
+function resumeFromRecent(id){
+  const t=recent.find(x=>x.id===id);
+  if(!t)return;
+  if(queue.find(q=>q.name.toLowerCase()===t.name.toLowerCase()&&!q.done)){showAlert(`"${t.name}" already in queue.`,'warn');switchTab('queue');return;}
+  queue.push({...t,id:'q-'+Date.now(),done:false});
+  save('queue_v4',queue);renderQueue();updateStats();switchTab('queue');
+  showAlert(`✓ "${t.name}" back in queue with ${fmt(t.elapsed)} already logged.`,'success');
+}
+function deleteRecent(id){recent=recent.filter(x=>x.id!==id);save('recent_v4',recent);renderRecentList();}
+
+// ── Tabs ──
+function switchTab(name){
+  ['queue','notion','recent'].forEach(t=>{
+    document.getElementById('tab-'+t).classList.toggle('active',t===name);
+    document.getElementById('panel-'+t).classList.toggle('active',t===name);
+  });
+  if(name==='notion')loadNotionTasks();
+  if(name==='recent')renderRecentList();
+}
+
+// Auto month
+(()=>{const m=['January','February','March','April','May','June','July','August','September','October','November','December'];const cur=m[new Date().getMonth()];for(const o of document.getElementById('newMonth').options)if(o.value===cur){o.selected=true;break;}})();
 
 // ── Timer ──
-function pick(i) {
-  if(state==='running') return;
-  selected=tasks[i];
-  document.getElementById('activeName').textContent=selected.name;
-  document.getElementById('activeClient').textContent=selected.month||'';
+let activeId=null,state='idle',interval=null,startedAt=null;
+
+function pickTask(id){
+  if(state==='running'&&activeId!==id){showAlert('Pause or finish the current task first.','warn');return;}
+  if(activeId===id&&state==='running')return;
+  activeId=id;
+  const t=queue.find(x=>x.id===id);
+  document.getElementById('activeName').textContent=t.name;
+  document.getElementById('activeClient').textContent=t.client||t.month||'';
+  updateClockDisplay(t.elapsed);
   document.getElementById('startBtn').disabled=false;
-  document.getElementById('stopBtn').disabled=false;
-  if(state==='idle'){elapsed=0;tick();}
-  renderList();
-  showAlert('Selected: '+selected.name,'info');
+  document.getElementById('doneBtn').disabled=false;
+  setStatus('idle');renderQueue();
 }
 
-function startTimer() {
-  if(!selected||state==='running') return;
-  state='running'; startedAt=Date.now()-(elapsed*1000);
-  interval=setInterval(()=>{ elapsed=Math.floor((Date.now()-startedAt)/1000); tick(); },500);
+function resumeTask(id){
+  const t=queue.find(x=>x.id===id);
+  if(!t)return;
+  t.done=false;save('queue_v4',queue);
+  pickTask(id);renderQueue();updateStats();
+  showAlert(`"${t.name}" reopened.`,'info');
+}
+
+function startTimer(){
+  if(!activeId||state==='running')return;
+  state='running';
+  const t=queue.find(x=>x.id===activeId);
+  startedAt=Date.now()-(t.elapsed*1000);
+  interval=setInterval(()=>{
+    const t2=queue.find(x=>x.id===activeId);if(!t2)return;
+    t2.elapsed=Math.floor((Date.now()-startedAt)/1000);
+    updateClockDisplay(t2.elapsed);
+    if(t2.elapsed%10===0)save('queue_v4',queue);
+  },500);
   setStatus('running');
   document.getElementById('startBtn').textContent='▶ RUNNING';
   document.getElementById('startBtn').disabled=true;
   document.getElementById('pauseBtn').disabled=false;
   document.getElementById('timerCard').classList.add('active');
   document.body.classList.add('running');
+  renderQueue();
 }
 
-function pauseTimer() {
-  if(state!=='running') return;
-  clearInterval(interval); interval=null; state='paused';
-  setStatus('paused');
+function pauseTimer(){
+  if(state!=='running')return;
+  clearInterval(interval);interval=null;state='paused';
+  save('queue_v4',queue);setStatus('paused');
   document.getElementById('startBtn').textContent='▶ RESUME';
   document.getElementById('startBtn').disabled=false;
   document.getElementById('pauseBtn').disabled=true;
@@ -339,38 +511,105 @@ function pauseTimer() {
   document.body.classList.remove('running');
 }
 
-function stopTimer() {
-  if(!selected) return;
-  clearInterval(interval); interval=null;
-  const ft=fmt(elapsed);
-  if(!confirm(`Complete "${selected.name}"?\nTime: ${ft}`)){if(state==='running')startTimer();return;}
-  state='idle'; elapsed=0; tick(); setStatus('idle');
-  document.getElementById('activeName').textContent='— TASK COMPLETED —';
+function doneTask(){
+  if(!activeId)return;
+  clearInterval(interval);interval=null;
+  const t=queue.find(x=>x.id===activeId);if(!t)return;
+  t.done=true;save('queue_v4',queue);
+  const ex=recent.find(r=>r.name.toLowerCase()===t.name.toLowerCase());
+  if(ex){ex.elapsed=t.elapsed;ex.client=t.client;}else{recent.push({...t});}
+  if(recent.length>20)recent=recent.slice(-20);
+  save('recent_v4',recent);
+  state='idle';activeId=null;
+  document.getElementById('activeName').textContent='— SELECT A TASK →';
   document.getElementById('activeClient').textContent='';
+  updateClockDisplay(0);
   document.getElementById('startBtn').textContent='▶ START';
-  ['startBtn','pauseBtn','stopBtn'].forEach(id=>document.getElementById(id).disabled=true);
+  ['startBtn','pauseBtn','doneBtn'].forEach(b=>document.getElementById(b).disabled=true);
   document.getElementById('timerCard').classList.remove('active');
   document.body.classList.remove('running');
-  selected=null; renderList();
-  showAlert(`✓ Done! ${ft} logged.`,'success');
-  setTimeout(loadTasks,1200);
+  setStatus('idle');renderQueue();updateStats();
+  document.getElementById('badge-recent').textContent=recent.length;
+  showAlert(`✓ "${t.name}" done — ${fmt(t.elapsed)} logged. Submit at end of day.`,'success');
 }
 
-function tick(){ document.getElementById('clock').textContent=fmt(elapsed); }
-function fmt(s){ return`${p(Math.floor(s/3600))}:${p(Math.floor((s%3600)/60))}:${p(s%60)}`; }
-function p(n){ return String(n).padStart(2,'0'); }
-function setStatus(s){ document.getElementById('dot').className='status-dot '+s; document.getElementById('statusTxt').textContent={idle:'IDLE',running:'RUNNING',paused:'PAUSED'}[s]; }
+function removeFromQueue(id){
+  if(id===activeId){clearInterval(interval);interval=null;state='idle';activeId=null;document.getElementById('activeName').textContent='— SELECT A TASK →';document.getElementById('activeClient').textContent='';updateClockDisplay(0);document.getElementById('startBtn').textContent='▶ START';['startBtn','pauseBtn','doneBtn'].forEach(b=>document.getElementById(b).disabled=true);document.getElementById('timerCard').classList.remove('active');document.body.classList.remove('running');setStatus('idle');}
+  queue=queue.filter(t=>t.id!==id);save('queue_v4',queue);renderQueue();updateStats();
+}
 
+// ── Edit Time ──
+let editingId=null;
+function openEditModal(){if(!activeId)return;openEditModalFor(activeId);}
+function openEditModalFor(id){
+  if(state==='running')pauseTimer();
+  editingId=id;
+  const t=queue.find(x=>x.id===id);if(!t)return;
+  document.getElementById('modalTaskName').textContent=t.name;
+  document.getElementById('editH').value=Math.floor(t.elapsed/3600);
+  document.getElementById('editM').value=Math.floor((t.elapsed%3600)/60);
+  document.getElementById('editS').value=t.elapsed%60;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');editingId=null;}
+function saveEditedTime(){
+  const h=parseInt(document.getElementById('editH').value)||0;
+  const m=parseInt(document.getElementById('editM').value)||0;
+  const s=parseInt(document.getElementById('editS').value)||0;
+  const total=h*3600+m*60+s;
+  const t=queue.find(x=>x.id===editingId);
+  if(t){t.elapsed=total;save('queue_v4',queue);}
+  if(editingId===activeId){startedAt=Date.now()-(total*1000);updateClockDisplay(total);}
+  renderQueue();updateStats();closeModal();
+  showAlert('✓ Time updated.','success');
+}
+document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+
+// ── End of Day Submit ──
+async function submitToNotion(){
+  const done=queue.filter(t=>t.done);
+  if(!done.length)return;
+  if(!confirm(`Submit ${done.length} task(s) to Notion?\n\n${done.map(t=>`• ${t.name} (${fmt(t.elapsed)})`).join('\n')}`))return;
+
+  document.getElementById('submitBtn').textContent='…SUBMITTING';
+  document.getElementById('submitBtn').disabled=true;
+  showAlert('Submitting to Notion…','info');
+
+  let ok=0,fail=0;
+  for(const t of done){
+    try{
+      if(!t.notionId){
+        // New task — create in Notion
+        const r=await createNotionTask(t.name,t.month||null,t.client||null);
+        if(r.success)ok++;else fail++;
+      } else {
+        // Was pulled from Notion — already exists, just count it
+        ok++;
+      }
+    }catch(e){fail++;}
+  }
+
+  queue=queue.filter(t=>!t.done);save('queue_v4',queue);
+  renderQueue();updateStats();
+  document.getElementById('submitBtn').textContent='SUBMIT DAY TO NOTION';
+  if(fail===0)showAlert(`✓ ${ok} task(s) submitted to Notion!`,'success');
+  else showAlert(`${ok} submitted, ${fail} failed. Try again.`,'warn');
+}
+
+// ── Helpers ──
+function updateStats(){const all=queue.length,done=queue.filter(t=>t.done).length,sec=queue.reduce((s,t)=>s+t.elapsed,0);document.getElementById('statTasks').textContent=all;document.getElementById('statDone').textContent=done;document.getElementById('statTime').textContent=fmtShort(sec);}
+function updateClockDisplay(s){document.getElementById('clock').textContent=fmt(s);}
+function fmt(s){return`${p(Math.floor(s/3600))}:${p(Math.floor((s%3600)/60))}:${p(s%60)}`;}
+function fmtShort(s){const h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return h>0?`${h}h${p(m)}m`:`${m}m`;}
+function p(n){return String(n).padStart(2,'0');}
+function setStatus(s){document.getElementById('dot').className='status-dot '+s;document.getElementById('statusTxt').textContent={idle:'IDLE',running:'RUNNING',paused:'PAUSED'}[s];}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;').replace(/"/g,'&quot;');}
 let _at;
-function showAlert(msg,type){
-  const el=document.getElementById('alert'); el.style.display='block'; el.textContent=msg;
-  const s={success:{bg:'rgba(71,255,176,.07)',b:'rgba(71,255,176,.25)',c:'#47ffb0'},info:{bg:'rgba(71,200,255,.06)',b:'rgba(71,200,255,.2)',c:'#47c8ff'},warn:{bg:'rgba(255,71,71,.07)',b:'rgba(255,71,71,.25)',c:'#ff6b6b'}}[type]||{};
-  Object.assign(el.style,{background:s.bg,border:`1px solid ${s.b}`,color:s.c});
-  clearTimeout(_at); _at=setTimeout(()=>el.style.display='none',3500);
-}
-function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function showAlert(msg,type){const el=document.getElementById('alert');el.style.display='block';el.textContent=msg;const s={success:{bg:'rgba(71,255,176,.07)',b:'rgba(71,255,176,.25)',c:'#47ffb0'},info:{bg:'rgba(71,200,255,.06)',b:'rgba(71,200,255,.2)',c:'#47c8ff'},warn:{bg:'rgba(255,71,71,.07)',b:'rgba(255,71,71,.25)',c:'#ff6b6b'}}[type]||{};Object.assign(el.style,{background:s.bg,border:`1px solid ${s.b}`,color:s.c});clearTimeout(_at);_at=setTimeout(()=>el.style.display='none',6000);}
 
-loadTasks();
+// ── Init ──
+renderQueue();updateStats();
+document.getElementById('badge-recent').textContent=recent.length;
 </script>
 </body>
 </html>
